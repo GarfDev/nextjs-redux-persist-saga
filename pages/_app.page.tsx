@@ -7,14 +7,21 @@ import { wrapper } from "../store";
 import { PersistGate } from "redux-persist/integration/react";
 import { initTheme } from "store/core/theming";
 import BaseStyle, { currentThemeSelector } from "global/theming";
+import { getLocale, getMessage } from "global/utils";
+import { IntlProvider } from "global/components";
 // Import css
 import "antd/dist/antd.css";
 // Import Components
 import { NavigationBar } from "global/components";
 
-function MyApp({ Component, pageProps }) {
+if (typeof window === "undefined") {
+  // dom parser for FormatedHTMLMessages
+  global.DOMParser = new (require("jsdom").JSDOM)().window.DOMParser;
+}
+
+function MyApp({ Component, pageProps, locale, messages }: any) {
   const dispatch = useDispatch();
-  const store = useStore((state) => state);
+  const store = useStore();
   const currentTheme = useSelector(currentThemeSelector);
 
   useEffect(() => {
@@ -22,19 +29,27 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <PersistGate persistor={store.__persistor} loading={<div>Loading...</div>}>
-      <ThemeProvider theme={currentTheme}>
-        <NavigationBar {...pageProps} />
-        <Component {...pageProps} />
-        <BaseStyle />
-      </ThemeProvider>
+    <PersistGate
+      persistor={(store as any).__persistor}
+      loading={<div>Loading...</div>}
+    >
+      <IntlProvider locale={locale} messages={messages}>
+        <ThemeProvider theme={currentTheme}>
+          <NavigationBar {...pageProps} />
+          <Component {...pageProps} />
+          <BaseStyle />
+        </ThemeProvider>
+      </IntlProvider>
     </PersistGate>
   );
 }
 
-MyApp.getInitialProps = async ({ Component, ctx }) => {
+MyApp.getInitialProps = async ({ Component, ctx }: any) => {
   // Keep in mind that this will be called twice on server, one for page and second for error page
   ctx.store.dispatch({ type: "APP", payload: "was set in _app" });
+
+  const locale = await getLocale(ctx);
+  const messages = await getMessage(locale);
 
   return {
     pageProps: {
@@ -45,6 +60,8 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
       // Some custom thing for all pages
       appProp: ctx.pathname,
     },
+    locale,
+    messages,
   };
 };
 
