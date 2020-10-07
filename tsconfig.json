@@ -67,7 +67,7 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx", "pages/i18n.js"
   ],
   "exclude": [
     "node_modules"

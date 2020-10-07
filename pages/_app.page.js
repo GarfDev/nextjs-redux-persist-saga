@@ -1,3 +1,4 @@
+import App from "next/app";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useStore } from "react-redux";
@@ -9,7 +10,7 @@ import BaseStyle, { currentThemeSelector } from "global/theming";
 // Import css
 import "antd/dist/antd.css";
 // Import Components
-import {  NavigationBar } from "global/components";
+import { NavigationBar } from "global/components";
 
 function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();

@@ -7,7 +7,9 @@ import {
   SignUpFormContainer,
 } from "./styles";
 
-const SignUp: React.FC = () => {
+interface Props {}
+
+const SignUp = ({}: Props) => {
   // Main return
   return (
     <Container>
@@ -18,7 +20,7 @@ const SignUp: React.FC = () => {
         <Col span={13}>
           <TextContainer>
             <TitleText>
-              TAKE YOUR OPPORTUNITY TO CHOICE YOUR BEST COLLEGE.
+              TAKE OPPORTUNITY TO CHOICE YOUR BEST COLLEGE
             </TitleText>
           </TextContainer>
         </Col>

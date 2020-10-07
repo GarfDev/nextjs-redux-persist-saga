@@ -1,4 +1,3 @@
-// const withImages = require("next-images");
 module.exports = {
-  pageExtensions: ["page.tsx", "page.js"],
+  pageExtensions: ["page.tsx", "page.js", "api.ts"],
 };
